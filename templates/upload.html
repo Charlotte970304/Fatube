@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.topnav-right {
+  float: right;
+}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <a class="active" href="../">Fatube</a>
+  <a href="../album">Album</a>
+  <div class="topnav-right">
+    <a href="../upload">Upload</a>
+    <a href="../logout">Logout</a>
+  </div>
+</div>
+
+<div style="padding-left:16px"> 
+   <h2>Upload</h2>
+   <p><span style="background-color:#FFC8B4;box-shadow:1px 1px 3px red;margin-right:8px;">{{alert}}</span></p>
+   <form action="" enctype='multipart/form-data' method='POST'>
+        <p>File Path:</p> <input type="file" name="file[]" multiple="" accept=".jpg,.jpeg,.png,.jfif,.HEIC,.mp4,.wmv,.flv,.mov,.avi">
+        <p>Choose Folder:
+          <select id="folder" name=folder onchange="Choose(this.value)">
+            {% for dir in dirs %}
+              <option value={{dirs.index(dir)}}>{{dir}}</option>
+            {% endfor %}
+          </select>
+          </p> 
+          <input type="hidden" id="foldername" name="foldername" value="">
+        <p><input type="submit" value="upload" name="upload"></p>
+    </form>  
+</div>
+</body>
+
+<script type="text/javascript">
+function Choose(number){
+    var choose=document.getElementById("folder").innerHTML;
+    if(number==1)
+    {
+      document.getElementById("foldername").type="text";
+    }
+//    document.write(document.getElementById("flodername").type);
+}
+</script>
+</html>

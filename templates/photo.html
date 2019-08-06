@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+
+html{
+    background:url('../../static/background5.gif') no-repeat center center;
+    min-height:100%;
+    background-size: 100% 100%;
+}
+ 
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  min-height:100%;
+}
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.topnav-right {
+  float: right;
+}
+
+
+
+</style>
+</head>
+<body style="height: 100%">
+
+<div class="topnav">
+  <a class="active" href="../../">Fatube</a>
+  <a href="../../album">Album</a>
+  <div class="topnav-right">
+    {% if login == 'no' %}
+      <a href="../../contact">Contact</a>
+      <a href="../../login">Login</a>
+    {% else %}
+      <a href="../../upload">Upload</a>
+      <a href="../../logout">Logout</a>
+    {% endif %}
+  </div>
+</div>
+<div style="height: 80%">
+<table border="0" width="100%" height="80%">
+  <tr height = "10%">
+    <td>
+      <form action="" enctype='multipart/form-data' method='POST'>    
+        <p>Folder:
+          <select id="folder" name=folder onchange="this.form.submit()">
+            {% for dir in dirs %}
+              <option value={{dirs.index(dir)}}>{{dir}}</option>
+            {% endfor %}
+          </select>
+    </td>
+    <td></td>
+  </tr>
+  <tr height = "20%">
+    {% if id == fileName[0] and id == fileName[-1] %}
+      <td align="center" width="50%"><input value='Last' name='nextphoto' type='submit' disabled></td>
+      <td align="center" width="50%"><input value='Next' name='nextphoto' type='submit' disabled></td>
+    {% elif id == fileName[0] %}
+      <td align="center" width="50%"><input value='Last' name='nextphoto' type='submit' disabled></td>
+      <td align="center" width="50%"><input value='Next' name='nextphoto' type='submit'></td>
+    {% elif id == fileName[-1] %}
+      <td align="center" width="50%"><input value='Last' name='nextphoto' type='submit'></td>
+      <td align="center" width="50%"><input value='Next' name='nextphoto' type='submit' disabled></td>
+    {% else %}
+      <td align="center" width="50%"><input value='Last' name='nextphoto' type='submit'></td>
+      <td align="center" width="50%"><input value='Next' name='nextphoto' type='submit'></td>
+    {% endif %}
+  </tr>
+  <tr>
+  <td colspan="2">
+    <br>
+    <br>
+    <img src="../../static/uploads/{{folder}}/photo/{{id}}.jpg" height="400px" style="display:block; margin:auto; border-style:double; border-color:#227700;border-width:20px">
+  </td>
+  </tr>
+</table>
+</div>
+</body>
+</html>
