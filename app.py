@@ -301,4 +301,4 @@ def video(folder,id):
 
 
 if __name__ == '__main__':
-    app.run(host='192.168.0.10',port='5000',debug=True)
+    app.run(debug=True)
