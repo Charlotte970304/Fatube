@@ -1,0 +1,3 @@
+Pillow==2.6.1
+Flask-Mail==0.9.1  
+Flask==0.11.1  
