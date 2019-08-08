@@ -128,15 +128,15 @@ def contact():
                     MAIL_SERVER='smtp.live.com',
                     MAIL_PROT=587,
                     MAIL_USE_TLS=True,
-                    MAIL_USERNAME='yueh860304@hotmail.com',
-                    MAIL_PASSWORD='moon860304'
+                    MAIL_USERNAME='admin@hotmail.com',
+                    MAIL_PASSWORD='password'
                 )
                 #  記得先設置參數再做實作mail
                 mail = Mail(app)
 
                 msg_title = 'Fatube-'+request.values['email']
-                msg_sender = 'yueh860304@hotmail.com'
-                msg_recipients = ['yueh970304@gmail.com']
+                msg_sender = 'admin@hotmail.com'
+                msg_recipients = ['admin@gmail.com']
                 msg_body = request.values['letter']
                 
                 msg = Message(msg_title,
