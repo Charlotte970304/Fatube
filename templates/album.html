@@ -44,7 +44,7 @@ body {
   <a href="../album">Album</a>
   <div class="topnav-right">
     {% if login == 'no' %}
-      <a href="../contact">Contact</a>
+      <a href="../contact2">Contact</a>
       <a href="../login">Login</a>
     {% else %}
       <a href="../upload">Upload</a>
@@ -74,7 +74,8 @@ body {
       {% endif %}  
 </table>
 <p></p>
-<table border="1" align="center">
+{% if filefolder != [] %}
+<table border="1" align="center" width="80%">
   {% for folder in filefolder %}
     <tr>
       <th colspan="7" bgcolor="#99ff33">{{folder}}</th>
@@ -130,6 +131,7 @@ body {
       {% endif %}
     {% endfor %} 
   {% endfor %}
+  {% endif %}
 </table>
 </form>
 </div>
