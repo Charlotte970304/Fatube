@@ -114,6 +114,27 @@ def upload():
         return redirect(url_for('upload'))
     return render_template('upload.html',dirs=dirs)
 
+message=[]
+
+@app.route('/contact2/', methods=['GET', 'POST'])
+def contact2():
+
+    global message
+
+    if request.method == 'POST':
+        if request.values['send'] == 'send':
+            if request.values['name'] == '':
+                return render_template('contact2.html',board=message,alert="you should leave your name",content=request.values['word'],name="")
+            elif request.values['word'] == '':
+                return render_template('contact2.html',board=message,alert="you should leave your word",content="",name=request.values['name'])
+            else:
+                message.append({request.values['name']: request.values['word']})
+                print(message)
+                return render_template('contact2.html',board=message,alert="",content="",name="")
+
+    return render_template('contact2.html',board=message,alert="",content="",name="")
+
+'''
 @app.route('/contact/', methods=['GET', 'POST'])
 def contact():
     if request.method == 'POST':
@@ -128,15 +149,15 @@ def contact():
                     MAIL_SERVER='smtp.live.com',
                     MAIL_PROT=587,
                     MAIL_USE_TLS=True,
-                    MAIL_USERNAME='admin@hotmail.com',
-                    MAIL_PASSWORD='password'
+                    MAIL_USERNAME='yueh860304@hotmail.com',
+                    MAIL_PASSWORD='moon860304'
                 )
                 #  記得先設置參數再做實作mail
                 mail = Mail(app)
 
                 msg_title = 'Fatube-'+request.values['email']
-                msg_sender = 'admin@hotmail.com'
-                msg_recipients = ['admin@gmail.com']
+                msg_sender = 'yueh860304@hotmail.com'
+                msg_recipients = ['yueh970304@gmail.com']
                 msg_body = request.values['letter']
                 
                 msg = Message(msg_title,
@@ -147,6 +168,8 @@ def contact():
                 return render_template('contact.html',alert="you have send the letter",content="")
 
     return render_template('contact.html',alert="",content="")
+'''
+
 
 
 @app.route('/album', methods=['POST', 'GET'])
@@ -176,12 +199,14 @@ def album():
         
     if request.method == 'POST':
 
-
-        if request.values['folder']:
-            print('yes')
-        else:
-            print('no')
-        if request.values['edit'] == 'edit':
+        if request.values['folder']!='0' and request.values['folder']!='1':
+            return render_template('album.html',dirs=dirs,login=login, \
+                filefolder=[dirs[int(request.values['folder'])]],files=dict2,edit=False)
+        elif request.values['folder'] =='1':
+            return render_template('album.html',dirs=dirs,login=login, \
+                filefolder=dirs[2:],files=dict2,edit=False)
+        
+        elif request.values['edit'] == 'edit':
             return render_template('album.html',dirs=dirs,login=login, \
                 filefolder=dirs[2:],files=dict2,edit=True)
         elif request.values['delete'] == 'delete':
@@ -214,14 +239,6 @@ def album():
         elif request.values['delete'] == 'cancel':
             return render_template('album.html',dirs=dirs,login=login, \
                 filefolder=dirs[2:],files=dict2,edit=False)
-
-        if request.values['folder']=='1' or request.values['folder']=='0':
-            return render_template('album.html',dirs=dirs,login=login,files=dict2, filefolder=dirs[2:],edit=False)
-        else:
-            return render_template('album.html',dirs=dirs,login=login, \
-                filefolder=[dirs[int(request.values['folder'])]],files=dict2,edit=False)
-        
-
         
     return render_template('album.html',dirs=dirs,login=login, \
         files=dict2, filefolder=dirs[2:],edit=False)
@@ -301,4 +318,4 @@ def video(folder,id):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000,debug=True)
