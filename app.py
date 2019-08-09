@@ -1,5 +1,5 @@
 from flask import Flask, render_template,request,redirect,url_for
-import os,io,time,copy,json
+import os,io,time,copy,json,shutil
 from PIL import Image
 from flask_mail import Mail,Message
 
@@ -59,7 +59,7 @@ def logout():
 @app.route('/upload', methods=['POST', 'GET'])
 def upload():
 
-    dirs=os.listdir(os.path.join(os.path.dirname(__file__), 'static\\uploads'))
+    dirs=os.listdir(os.path.join(os.path.dirname(__file__), 'static/uploads'))
     dirs.insert(0,'New Folder')
     dirs.insert(0,'Not Choose')
 
@@ -80,23 +80,23 @@ def upload():
                 return render_template('upload.html',alert='Please choose a folder or creat a folder',dirs=dirs)
 
             elif request.values['folder']=='1':
-                if not os.path.isdir(os.path.join(basepath, 'static\\uploads\\'+request.values['foldername'])):
-                    os.mkdir(os.path.join(basepath, 'static\\uploads\\'+request.values['foldername']))
-                    os.mkdir(os.path.join(basepath, 'static\\uploads\\'+request.values['foldername'])+'\\video')
-                    os.mkdir(os.path.join(basepath, 'static\\uploads\\'+request.values['foldername'])+'\\photo')
-                    os.mkdir(os.path.join(basepath, 'static\\uploads\\'+request.values['foldername'])+'\\album')
+                if not os.path.isdir(os.path.join(basepath, 'static/uploads/'+request.values['foldername'])):
+                    os.mkdir(os.path.join(basepath, 'static/uploads/'+request.values['foldername']))
+                    os.mkdir(os.path.join(basepath, 'static/uploads/'+request.values['foldername'])+'/video')
+                    os.mkdir(os.path.join(basepath, 'static/uploads/'+request.values['foldername'])+'/photo')
+                    os.mkdir(os.path.join(basepath, 'static/uploads/'+request.values['foldername'])+'/album')
 
                 if format == '.mp4':
-                    upload_path = os.path.join(basepath, 'static\\uploads\\'+request.values['foldername']+'\\video\\'+str(fileName).replace('.','')+str(format))
+                    upload_path = os.path.join(basepath, 'static/uploads/'+request.values['foldername']+'/video/'+str(fileName).replace('.','')+str(format))
                 else:
-                    upload_path = os.path.join(basepath, 'static\\uploads\\'+request.values['foldername']+'\\photo\\'+str(fileName).replace('.','')+str(format))
-                    album_path = os.path.join(basepath, 'static\\uploads\\'+request.values['foldername'],'album',str(fileName).replace('.','')+str(format))   
+                    upload_path = os.path.join(basepath, 'static/uploads/'+request.values['foldername']+'/photo/'+str(fileName).replace('.','')+str(format))
+                    album_path = os.path.join(basepath, 'static/uploads/'+request.values['foldername'],'album',str(fileName).replace('.','')+str(format))   
             else:
                 if format == '.mp4':
-                    upload_path = os.path.join(basepath, 'static\\uploads\\'+dirs[int(request.values['folder'])],'video',str(fileName).replace('.','')+str(format))
+                    upload_path = os.path.join(basepath, 'static/uploads/'+dirs[int(request.values['folder'])],'video',str(fileName).replace('.','')+str(format))
                 else:
-                    upload_path = os.path.join(basepath, 'static\\uploads\\'+dirs[int(request.values['folder'])],'photo',str(fileName).replace('.','')+str(format))
-                    album_path = os.path.join(basepath, 'static\\uploads\\'+dirs[int(request.values['folder'])],'album',str(fileName).replace('.','')+str(format))
+                    upload_path = os.path.join(basepath, 'static/uploads/'+dirs[int(request.values['folder'])],'photo',str(fileName).replace('.','')+str(format))
+                    album_path = os.path.join(basepath, 'static/uploads/'+dirs[int(request.values['folder'])],'album',str(fileName).replace('.','')+str(format))
 
             if format!='.mp4':
                 image = Image.open(f)
@@ -178,7 +178,7 @@ def album():
     else:
         login='no'
 
-    dirs=os.listdir(os.path.join(os.path.dirname(__file__), 'static\\uploads'))
+    dirs=os.listdir(os.path.join(os.path.dirname(__file__), 'static/uploads'))
     dirs.insert(0,'ALL')
     dirs.insert(0,'')
 
@@ -188,11 +188,11 @@ def album():
         if dir == "ALL" or dir == '':
             continue
         dict2[dir]={'photo':[],'video':[]}
-        path=os.path.join(os.path.dirname(__file__), 'static\\uploads\\'+dir+'\\photo')
+        path=os.path.join(os.path.dirname(__file__), 'static/uploads/'+dir+'/photo')
         for lists in os.listdir(path):
             dict2[dir]['photo'].append(lists)
         
-        path=os.path.join(os.path.dirname(__file__), 'static\\uploads\\'+dir+'\\video')
+        path=os.path.join(os.path.dirname(__file__), 'static/uploads/'+dir+'/video')
         for lists in os.listdir(path):
             dict2[dir]['video'].append(lists)
         
@@ -215,23 +215,27 @@ def album():
                 name=f[f.index('-')+1:f.index('#')]
                 format=f[f.index('#')+1:]
                 if format == "video":
-                    os.remove(os.path.join(os.path.dirname(__file__), 'static\\uploads\\'+muru,'video',name))
+                    os.remove(os.path.join(os.path.dirname(__file__), 'static/uploads/'+muru,'video',name))
                 else:
-                    os.remove(os.path.join(os.path.dirname(__file__), 'static\\uploads\\'+muru,'photo',name))
-                    os.remove(os.path.join(os.path.dirname(__file__), 'static\\uploads\\'+muru,'album',name))
+                    os.remove(os.path.join(os.path.dirname(__file__), 'static/uploads/'+muru,'photo',name))
+                    os.remove(os.path.join(os.path.dirname(__file__), 'static/uploads/'+muru,'album',name))
 
                 dict1={} #record all folder has what number name
                 for dir in dirs:
                     if dir == "ALL" or dir == '':
                         continue
                     dict1[dir]={'photo':[],'video':[]}
-                    path=os.path.join(os.path.dirname(__file__), 'static\\uploads\\'+dir+'\\photo')
+                    path=os.path.join(os.path.dirname(__file__), 'static/uploads/'+dir+'/photo')
                     for lists in os.listdir(path):
                         dict1[dir]['photo'].append(lists)
                     
-                    path=os.path.join(os.path.dirname(__file__), 'static\\uploads\\'+dir+'\\video')
+                    path=os.path.join(os.path.dirname(__file__), 'static/uploads/'+dir+'/video')
                     for lists in os.listdir(path):
                         dict1[dir]['video'].append(lists)
+                    if dict1[dir]=={'photo':[],'video':[]}:
+                        shutil.rmtree(os.path.join(os.path.dirname(__file__), 'static/uploads/'+dir))
+                        del dict1[dir]
+                        dirs.remove(dir)
 
             return render_template('album.html',dirs=dirs,login=login, \
                 filefolder=dirs[2:],files=dict1,edit=True)
@@ -250,15 +254,15 @@ def photo(folder,id):
         login='no'
 
     basepath = os.path.dirname(__file__)
-    dirs=os.listdir(os.path.join(os.path.dirname(__file__), 'static\\uploads'))
+    dirs=os.listdir(os.path.join(os.path.dirname(__file__), 'static/uploads'))
     for dir in dirs:
-        if len(os.listdir(os.path.join(basepath, 'static\\uploads\\'+dir,'photo')))==0:
+        if len(os.listdir(os.path.join(basepath, 'static/uploads/'+dir,'photo')))==0:
             dirs.remove(dir)
     dirs.insert(0,'')
 
     fileName=[]
-    for lists in os.listdir(os.path.join(basepath, 'static\\uploads\\'+folder,'photo')):
-        sub_path = os.path.join(os.path.join(basepath, 'static\\uploads\\'+folder,'photo'), lists)
+    for lists in os.listdir(os.path.join(basepath, 'static/uploads/'+folder,'photo')):
+        sub_path = os.path.join(os.path.join(basepath, 'static/uploads/'+folder,'photo'), lists)
         if os.path.isfile(sub_path):
             fileName.append(lists[:lists.index('.')])
 
@@ -266,8 +270,8 @@ def photo(folder,id):
         if request.values['folder'] != '0':
             folder=dirs[int(request.values['folder'])]
             fileName.clear()
-            for lists in os.listdir(os.path.join(basepath, 'static\\uploads\\'+folder,'photo')):
-                sub_path = os.path.join(os.path.join(basepath, 'static\\uploads\\'+folder,'photo'), lists)
+            for lists in os.listdir(os.path.join(basepath, 'static/uploads/'+folder,'photo')):
+                sub_path = os.path.join(os.path.join(basepath, 'static/uploads/'+folder,'photo'), lists)
                 if os.path.isfile(sub_path):
                     fileName.append(lists[:lists.index('.')])
             id=fileName[0]
@@ -286,15 +290,15 @@ def video(folder,id):
         login='no'
 
     basepath = os.path.dirname(__file__)
-    dirs=os.listdir(os.path.join(os.path.dirname(__file__), 'static\\uploads'))
+    dirs=os.listdir(os.path.join(os.path.dirname(__file__), 'static/uploads'))
     for dir in dirs:
-        if len(os.listdir(os.path.join(basepath, 'static\\uploads\\'+dir,'video')))==0:
+        if len(os.listdir(os.path.join(basepath, 'static/uploads/'+dir,'video')))==0:
             dirs.remove(dir)
     dirs.insert(0,'')
 
     fileName=[]
-    for lists in os.listdir(os.path.join(basepath, 'static\\uploads\\'+folder,'video')):
-        sub_path = os.path.join(os.path.join(basepath, 'static\\uploads\\'+folder,'video'), lists)
+    for lists in os.listdir(os.path.join(basepath, 'static/uploads/'+folder,'video')):
+        sub_path = os.path.join(os.path.join(basepath, 'static/uploads/'+folder,'video'), lists)
         if os.path.isfile(sub_path):
             fileName.append(lists[:lists.index('.')])
 
@@ -302,8 +306,8 @@ def video(folder,id):
         if request.values['folder'] != '0':
             folder=dirs[int(request.values['folder'])]
             fileName.clear()
-            for lists in os.listdir(os.path.join(basepath, 'static\\uploads\\'+folder,'video')):
-                sub_path = os.path.join(os.path.join(basepath, 'static\\uploads\\'+folder,'video'), lists)
+            for lists in os.listdir(os.path.join(basepath, 'static/uploads/'+folder,'video')):
+                sub_path = os.path.join(os.path.join(basepath, 'static/uploads/'+folder,'video'), lists)
                 if os.path.isfile(sub_path):
                     fileName.append(lists[:lists.index('.')])
             id=fileName[0]
