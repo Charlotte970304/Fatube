@@ -1,13 +1,11 @@
 from flask import Flask, render_template,request,redirect,url_for
-import os,io,time,copy
+import os,io,time,copy,json
 from PIL import Image
 from flask_mail import Mail,Message
 
 
 root=False
 app = Flask(__name__)
-
-
 
 def fill_images(photo):
 
@@ -114,12 +112,12 @@ def upload():
         return redirect(url_for('upload'))
     return render_template('upload.html',dirs=dirs)
 
-message=[]
-
+    
 @app.route('/contact2/', methods=['GET', 'POST'])
 def contact2():
 
-    global message
+    with open('./messageboard.json','r') as file_object:
+        message = json.load(file_object)
 
     if request.method == 'POST':
         if request.values['send'] == 'send':
@@ -129,7 +127,8 @@ def contact2():
                 return render_template('contact2.html',board=message,alert="you should leave your word",content="",name=request.values['name'])
             else:
                 message.append({request.values['name']: request.values['word']})
-                print(message)
+                with open('messageboard.json', 'w') as f:
+                    json.dump(message, f)
                 return render_template('contact2.html',board=message,alert="",content="",name="")
 
     return render_template('contact2.html',board=message,alert="",content="",name="")
@@ -149,15 +148,15 @@ def contact():
                     MAIL_SERVER='smtp.live.com',
                     MAIL_PROT=587,
                     MAIL_USE_TLS=True,
-                    MAIL_USERNAME='admin@hotmail.com',
-                    MAIL_PASSWORD='password'
+                    MAIL_USERNAME='yueh860304@hotmail.com',
+                    MAIL_PASSWORD='moon860304'
                 )
                 #  記得先設置參數再做實作mail
                 mail = Mail(app)
 
                 msg_title = 'Fatube-'+request.values['email']
-                msg_sender = 'admin@hotmail.com'
-                msg_recipients = ['admin@gmail.com']
+                msg_sender = 'yueh860304@hotmail.com'
+                msg_recipients = ['yueh970304@gmail.com']
                 msg_body = request.values['letter']
                 
                 msg = Message(msg_title,
