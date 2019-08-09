@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.bigText {
+    height:30px;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.topnav-right {
+  float: right;
+}
+
+.Board{
+}
+
+.Message{
+float:right;
+position:absolute;
+top:20%;
+right:10%;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="topnav">
+  <a class="active" href="../">Fatube</a>
+  <a href="../album">Album</a>
+  <div class="topnav-right">
+      <a href="../contact2">Contact</a>
+      <a href="../login">Login</a>
+  </div>
+</div>
+
+<div class="Board">
+  <div style="padding-left:20px">    
+    <h2>Welcome to my Fatube!</h2>
+    <table border="0" width="50%">
+      <tr>
+        <th bgcolor="#008800">Message Board</th>
+      </tr>
+      {% for message in board %}
+      {% set count = loop.index %}
+        <tr>
+          {% for Name,Word in message.items() %}
+            {% if count %2 == 0 %}
+              <td bgcolor="#33FF33">
+                  <div style="padding-left:16px">    
+                    <font color="blue">{{Name}}</font>：{{Word}}</td>
+                  </div>
+            
+            {% else %}
+              <td bgcolor="#99ff99">
+                <div style="padding-left:16px">    
+                  <font color="blue">{{Name}}</font>：{{Word}}</td>
+                </div>
+              
+            {% endif %}
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+  <div class="Message">
+    <p><span style="background-color:#FFC8B4;box-shadow:1px 1px 3px red;margin-right:8px;">{{alert}}</span></p>
+    <form action="" enctype='multipart/form-data' method='POST'>
+      <p>Name：<input type='text' name="name" value="{{name}}"></p>
+      <p>Message：</p>
+      <textarea name="word" style="height:150px;width:400px">{{content}}</textarea>
+      <div style="padding-left:350px">
+        <p><input type="submit" value="send" name="send"></p>
+      </div>
+    </form>
+  </div>
+  <div style="clear:both;"></div><!--這是用來清除上方的浮動效果-->
+</body>
+</html>
+
