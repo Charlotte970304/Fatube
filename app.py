@@ -39,7 +39,7 @@ def login():
     global root
     alert=""
     if request.method == 'POST': 
-        if request.values['username']=="root" and request.values['password']=="0000" :
+        if request.values['username']== <<your username>> and request.values['password']== <<your password>> :
             root=True
             return redirect(url_for('index'))
         else:
