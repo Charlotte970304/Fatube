@@ -134,7 +134,7 @@ def contact2():
 
     return render_template('contact2.html',board=message,alert="",content="",name="")
 
-'''
+
 @app.route('/contact/', methods=['GET', 'POST'])
 def contact():
     if request.method == 'POST':
@@ -168,7 +168,7 @@ def contact():
                 return render_template('contact.html',alert="you have send the letter",content="")
 
     return render_template('contact.html',alert="",content="")
-'''
+
 
 
 
